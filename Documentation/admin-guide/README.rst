@@ -5,12 +5,17 @@ These are the release notes for Linux version 4.  Read them carefully,
 as they tell you what this is all about, explain how to install the
 kernel, and what to do if something goes wrong.
 
+这是 Linux version 4 的发行说明。它们会告诉你所有的是什么，并解释如何安装内
+核，当出现错误时应该做什么，所以需要仔细阅读。
+
 What is Linux?
 --------------
 
   Linux is a clone of the operating system Unix, written from scratch by
   Linus Torvalds with assistance from a loosely-knit team of hackers across
   the Net. It aims towards POSIX and Single UNIX Specification compliance.
+  Linux 是 Unix 操作系统的克隆版本，是 Linus Torvalds 从零开始写，并由网络上的
+  一个松散的黑客团队援助。旨在 POSIX 和单 UNIX 规范的遵从性。
 
   It has all the features you would expect in a modern fully-fledged Unix,
   including true multitasking, virtual memory, shared libraries, demand
@@ -58,6 +63,7 @@ Documentation
 Installing the kernel source
 ----------------------------
 
+使用源码
  - If you install the full sources, put the kernel tarball in a
    directory where you have permissions (e.g. your home directory) and
    unpack it::
@@ -70,7 +76,9 @@ Installing the kernel source
    incomplete) set of kernel headers that are used by the library header
    files.  They should match the library, and not get messed up by
    whatever the kernel-du-jour happens to be.
+   不能使用 /usr/src/linux 目录
 
+使用 patch
  - You can also upgrade between 4.x releases by patching.  Patches are
    distributed in the xz format.  To install by patching, get all the
    newer patch files, enter the top level directory of the kernel source
@@ -83,6 +91,7 @@ Installing the kernel source
    the backup files (some-file-name~ or some-file-name.orig), and make sure
    that there are no failed patches (some-file-name# or some-file-name.rej).
    If there are, either you or I have made a mistake.
+   你可能想要删除备份文件，并且要确保没有 patch 失败。
 
    Unlike patches for the 4.x kernels, patches for the 4.x.y kernels
    (also known as the -stable kernels) are not incremental but instead apply
