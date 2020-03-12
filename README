@@ -2,9 +2,11 @@ Linux kernel
 ============
 
 This file was moved to Documentation/admin-guide/README.rst
+这个文件移动到 Documentation/admin-guide/README.rst 中了
 
 Please notice that there are several guides for kernel developers and users.
 These guides can be rendered in a number of formats, like HTML and PDF.
+这里为开发者和用户准备了一系列的说明文档，这些文档可以是 HTML 或者 PDF 格式
 
 In order to build the documentation, use ``make htmldocs`` or
 ``make pdfdocs``.
@@ -12,7 +14,9 @@ In order to build the documentation, use ``make htmldocs`` or
 There are various text files in the Documentation/ subdirectory,
 several of them using the Restructured Text markup notation.
 See Documentation/00-INDEX for a list of what is contained in each file.
+Documentation/00-INDEX 文档中可以看到 Documentation 文件夹下每个文件或者文件夹的说明
 
 Please read the Documentation/process/changes.rst file, as it contains the
 requirements for building and running the kernel, and information about
 the problems which may result by upgrading your kernel.
+Documentation/process/changes.rst 文件包含了编译和运行内核的一些需求，以及关于升级内核引起的问题的一些信息
