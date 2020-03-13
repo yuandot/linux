@@ -101,6 +101,11 @@ Installing the kernel source
    want to jump to 4.0.3, you must first reverse the 4.0.2 patch (that is,
    patch -R) **before** applying the 4.0.3 patch. You can read more on this in
    :ref:`Documentation/process/applying-patches.rst <applying_patches>`.
+   给 4.x.y 打补丁是直接基于 4.x 内核。例如，如果想要从 4.0 内核更新到 4.0.3 内核，
+   不能打 4.0.1 和 4.0.2 的补丁，应该直接打 4.0.3 的补丁。同样的，如果想要从 4.0.2 
+    到4.0.3，首先要从 4.0.2 返回到 4.0，然后再打 4.0.3 的补丁。
+   可以在 `Documentation/process/applying-patches.rst <applying_patches>` 看到
+   更多信息
 
    Alternatively, the script patch-kernel can be used to automate this
    process.  It determines the current kernel version and applies any
@@ -111,10 +116,17 @@ Installing the kernel source
    The first argument in the command above is the location of the
    kernel source.  Patches are applied from the current directory, but
    an alternative directory can be specified as the second argument.
+   该脚本内部有详细说明
 
  - Make sure you have no stale .o files and dependencies lying around::
+   确保不会有过时的 .o 文件和依赖项。
 
      cd linux
+     # make mrproper命令会删除所有的编译生成文件、内核配置文件(.config文件)
+     # 和各种备份文件，所以几乎只在第一次执行内核编译前才用这条命令
+     # make clean命令则是用于删除大多数的编译生成文件，但是会保留内核的配置
+     # 文件.config，还有足够的编译支持来建立扩展模块。所以你若只想删除前一次
+     # 编译过程的残留数据，只需执行make clean命令。
      make mrproper
 
    You should now have the sources correctly installed.
@@ -130,6 +142,11 @@ Software requirements
    errors that are very difficult to track down, so don't assume that
    you can just update packages when obvious problems arise during
    build or operation.
+   编译和运行 4.x 版本内核需要几个软件包的最新版本，查看 
+   :ref:`Documentation/process/changes.rst <changes>` 获取请求的最小版本号，和如何升级
+   这些软件包。
+   注意使用这些软件包的过旧版本可能会引起不容易追踪的间接错误，因此，不要等到编译
+   或者操作时出现问题时再更新。
 
 Build directory for the kernel
 ------------------------------
@@ -142,6 +159,9 @@ Build directory for the kernel
 
      kernel source code: /usr/src/linux-4.X
      build directory:    /home/name/build/kernel
+     
+   当编译内核时，所有输出文件默认存储在源码树中，可以使用 ``make O=output/dir`` 选项
+   指定输出文件目录，包括配置文件
 
    To configure and build the kernel, use::
 
@@ -152,6 +172,7 @@ Build directory for the kernel
 
    Please note: If the ``O=output/dir`` option is used, then it must be
    used for all invocations of make.
+   注意：如果 ``O=output/dir`` 选项被使用了，必须在所有的 make 调用中使用
 
 Configuring the kernel
 ----------------------
@@ -162,10 +183,14 @@ Configuring the kernel
    as expected.  If you want to carry your existing configuration to a
    new version with minimal work, use ``make oldconfig``, which will
    only ask you for the answers to new questions.
+   不要跳过这一步，即使只是更新一个微小的版本。每个发行版本都增加了新的配置选
+   项，如果配置文件没有按照预期的设置，就会出现奇怪的问题。如果想要使用最少的
+   工作量将现有的配置增加到新的版本中，则使用 ``make oldconfig`` 可以仅仅询
+   问你新问题的配置选项
 
  - Alternative configuration commands are::
 
-     "make config"      Plain text interface.
+     "make config"      Plain text interface.纯文本接口
 
      "make menuconfig"  Text based color menus, radiolists & dialogs.
 
@@ -234,18 +259,24 @@ Configuring the kernel
 
    You can find more information on using the Linux kernel config tools
    in Documentation/kbuild/kconfig.txt.
+   你可以在 Documentation/kbuild/kconfig.txt 找到更多关于内核配置工具的信息
 
  - NOTES on ``make config``:
 
     - Having unnecessary drivers will make the kernel bigger, and can
       under some circumstances lead to problems: probing for a
       nonexistent controller card may confuse your other controllers.
+      不需要的驱动会是内核更大，并且在某些情况下可能导致问题：寻找不存在的
+      控制器卡可能混淆其他控制器
 
     - A kernel with math-emulation compiled in will still use the
       coprocessor if one is present: the math emulation will just
       never get used in that case.  The kernel will be slightly larger,
       but will work on different machines regardless of whether they
       have a math coprocessor or not.
+      如果存在协处理器，那么编译了数学仿真的内核仍然会使用协处理器:在这种
+      情况下，数学仿真将永远不会被使用。内核将稍微大一些，但是可以在不同的
+      机器上工作，不管它们是否有数学协处理器
 
     - The "kernel hacking" configuration details usually result in a
       bigger or slower kernel (or both), and can even make the kernel
@@ -253,6 +284,12 @@ Configuring the kernel
       break bad code to find kernel problems (kmalloc()).  Thus you
       should probably answer 'n' to the questions for "development",
       "experimental", or "debugging" features.
+      “内核破解”配置细节通常会导致内核变大或变慢(或两者都是)，甚至可能
+      通过配置一些例程来主动尝试破解坏代码以发现内核问题，从而降低内核的
+      稳定性(kmalloc())。因此，对于“开发”、“实验”或“调试”特性的问题，您
+      可能应该回答“n”。
+
+
 
 Compiling the kernel
 --------------------
